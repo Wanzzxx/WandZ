@@ -47,11 +47,11 @@ local islands = {
 	{ name = "Ninja", pos = Vector3.new(-1876.813843, 13.558611, -737.722473) },
 	{ name = "Ninja", pos = Vector3.new(-2109.786865, 12.801344, -596.099854) },
 	{ name = "Judgement", pos = Vector3.new(-1273.102905, 8.520060, -1191.468994) },
-	{ name = "Judgement", pos = Vector3.new(-1421.924561, 21.431782, -1382.131836) },
 	{ name = "Shinjuku", pos = Vector3.new(-21.131468, 9.205597, -1847.090454) },
 	{ name = "Shinjuku", pos = Vector3.new(669.320557, 9.404799, -1693.271973) },
 	{ name = "Slime", pos = Vector3.new(-1124.683838, 13.918226, 373.355255) },
 	{ name = "Hollow", pos = Vector3.new(-568.870422, -1.921274, 1232.567139) },
+	{ name = "Sailor", pos = Vector3.new(249.287292, 7.593238, 926.742493) },
 }
 
 local function isAllowed()

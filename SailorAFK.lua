@@ -29,7 +29,7 @@ toggleBtn.Size = UDim2.new(0, 100, 0, 35)
 toggleBtn.Position = UDim2.new(0.5, -50, 0, 10)
 toggleBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 toggleBtn.TextColor3 = Color3.fromRGB(250, 250, 250)
-toggleBtn.TextSize = 13
+toggleBtn.TextSize = 11
 toggleBtn.Font = Enum.Font.GothamBold
 toggleBtn.Text = "Layar Ireng: Idup"
 toggleBtn.BorderSizePixel = 0
@@ -41,14 +41,6 @@ toggleBtn.MouseButton1Click:Connect(function()
 	blackScreen.Visible = not blackScreen.Visible
 	toggleBtn.Text = blackScreen.Visible and "Layar Ireng: Idup" or "Layar Ireng: Ded"
 end)
-
-local image = Instance.new("ImageLabel")
-image.Size = UDim2.new(0, 100, 0, 100)
-image.Position = UDim2.new(0, 10, 0, 50)
-image.BackgroundTransparency = 0.5
-image.Image = "rbxassetid://110749576995534"
-image.ZIndex = 12
-image.Parent = screenGui
 
 local islands = {
 	{ name = "Lawless", pos = Vector3.new(54.656269, 6.627283, 1814.841064) },
@@ -92,7 +84,7 @@ game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(func
 	if child.Name == "ErrorPrompt" then
 		while true do
 			TeleportService:Teleport(game.PlaceId, player)
-			task.wait(1)
+			task.wait(0.1)
 		end
 	end
 end)
@@ -135,7 +127,7 @@ while true do
 	for _, island in ipairs(islands) do
 		if isAllowed() then
 			pcall(function() PortalRemote:FireServer(island.name) end)
-			task.wait(0.5)
+			task.wait(0.3)
 			if character and character.Parent then
 				character:PivotTo(CFrame.new(island.pos))
 			end

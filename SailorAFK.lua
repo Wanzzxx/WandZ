@@ -35,7 +35,7 @@ blackScreen.ZIndex = 10
 blackScreen.Visible = true
 blackScreen.Parent = screenGui
 
--- Black Sceeen
+-- Black Screen
 local toggleBtn = Instance.new("TextButton")
 toggleBtn.Size = UDim2.new(0, 120, 0, 35)
 toggleBtn.Position = UDim2.new(0.5, -60, 0, 10)
@@ -83,13 +83,13 @@ end)
 local allIslands = {
 	{ name = "Lawless", pos = Vector3.new(54.656269, 6.627283, 1814.841064), boss = false },
 	{ name = "Ninja", pos = Vector3.new(-1876.813843, 13.558611, -737.722473), boss = false },
-	{ name = "Ninja", pos = Vector3.new(-2109.786865, 12.801344, -596.099854), boss = true },
+	{ name = "Ninja", pos = Vector3.new(-2109.786865, 12.801344, -596.099854), boss = true }, -- Boss POS
 	{ name = "Judgement", pos = Vector3.new(-1273.102905, 8.520060, -1191.468994), boss = false },
 	{ name = "Shinjuku", pos = Vector3.new(-21.131468, 9.205597, -1847.090454), boss = false },
 	{ name = "Shinjuku", pos = Vector3.new(669.320557, 9.404799, -1693.271973), boss = false },
 	{ name = "Slime", pos = Vector3.new(-1124.683838, 13.918226, 373.355255), boss = false },
-	{ name = "Hollow", pos = Vector3.new(-568.870422, -1.921274, 1232.567139), boss = true },
-	{ name = "Sailor", pos = Vector3.new(249.287292, 7.593238, 926.742493), boss = true },
+	{ name = "Hollow", pos = Vector3.new(-568.870422, -1.921274, 1232.567139), boss = true }, -- Boss POS
+	{ name = "Sailor", pos = Vector3.new(249.287292, 7.593238, 926.742493), boss = true }, -- Boss POS
 }
 
 -- Players Count, max 2 players only in server
@@ -133,17 +133,6 @@ game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(func
 	end
 end)
 
-task.spawn(function()
-	while true do
-		for _, obj in ipairs(workspace:GetChildren()) do
-			if obj:IsA("Model") and obj:FindFirstChildWhichIsA("Humanoid") and obj ~= character then
-				obj:Destroy()
-			end
-		end
-		task.wait(1)
-	end
-end)
-
 -- Additional, Idk if this works? // Removing Texture & Decal
 task.spawn(function()
 	for _, obj in ipairs(workspace:GetDescendants()) do
@@ -165,11 +154,35 @@ task.spawn(function()
 	end
 end)
 
+-- Check if all nearby NPCs within range are dead
+local RANGE = 20
+local function allNearbyDead()
+	if not character then return true end
+	local hrp = character:FindFirstChild("HumanoidRootPart")
+	if not hrp then return true end
+	for _, obj in ipairs(workspace.NPCs:GetChildren()) do
+		local hum = obj:FindFirstChildWhichIsA("Humanoid")
+		local root = obj:FindFirstChild("HumanoidRootPart")
+		if hum and root and hum.Health > 0 then
+			if (root.Position - hrp.Position).Magnitude <= RANGE then
+				return false
+			end
+		end
+	end
+	return true
+end
+
+-- Wait until all nearby NPCs are dead then move on
+local function waitForClear()
+	while not allNearbyDead() do
+		task.wait(0.1)
+	end
+end
+
 -- Boss TP Stuff
 while true do
 	for _, island in ipairs(allIslands) do
 		if island.boss and not autoBossTP then
-			task.wait(0) -- Additional delay teleport to boss position, default = 0
 			continue
 		end
 		if isAllowed() then
@@ -178,7 +191,7 @@ while true do
 			if character and character.Parent then
 				character:PivotTo(CFrame.new(island.pos))
 			end
+			waitForClear() -- Wait until nearby NPCs are dead
 		end
-		task.wait(0.8) -- Delay teleport to NPCs/Bosses Position
 	end
 end

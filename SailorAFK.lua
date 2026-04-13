@@ -11,6 +11,17 @@ local PortalRemote = ReplicatedStorage.Remotes.TeleportToPortal
 
 Settings.Rendering.QualityLevel = 1
 
+-- Load saved boss TP state
+local autoBossTP = true
+pcall(function()
+	local saved = readfile("autoBossTP.txt")
+	autoBossTP = saved == "true"
+end)
+
+local function saveState()
+	pcall(function() writefile("autoBossTP.txt", tostring(autoBossTP)) end)
+end
+
 local screenGui = Instance.new("ScreenGui")
 screenGui.ResetOnSpawn = false
 screenGui.IgnoreGuiInset = true
@@ -24,9 +35,10 @@ blackScreen.ZIndex = 10
 blackScreen.Visible = true
 blackScreen.Parent = screenGui
 
+-- Black screen toggle (top center)
 local toggleBtn = Instance.new("TextButton")
-toggleBtn.Size = UDim2.new(0, 100, 0, 35)
-toggleBtn.Position = UDim2.new(0.5, -50, 0, 10)
+toggleBtn.Size = UDim2.new(0, 120, 0, 35)
+toggleBtn.Position = UDim2.new(0.5, -60, 0, 10)
 toggleBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 toggleBtn.TextColor3 = Color3.fromRGB(250, 250, 250)
 toggleBtn.TextSize = 11
@@ -42,16 +54,41 @@ toggleBtn.MouseButton1Click:Connect(function()
 	toggleBtn.Text = blackScreen.Visible and "Layar Ireng: Idup" or "Layar Ireng: Ded"
 end)
 
-local islands = {
-	{ name = "Lawless", pos = Vector3.new(54.656269, 6.627283, 1814.841064) },
-	{ name = "Ninja", pos = Vector3.new(-1876.813843, 13.558611, -737.722473) },
-	{ name = "Ninja", pos = Vector3.new(-2109.786865, 12.801344, -596.099854) }, -- Boss POS
-	{ name = "Judgement", pos = Vector3.new(-1273.102905, 8.520060, -1191.468994) },
-	{ name = "Shinjuku", pos = Vector3.new(-21.131468, 9.205597, -1847.090454) },
-	{ name = "Shinjuku", pos = Vector3.new(669.320557, 9.404799, -1693.271973) },
-	{ name = "Slime", pos = Vector3.new(-1124.683838, 13.918226, 373.355255) },
-	{ name = "Hollow", pos = Vector3.new(-568.870422, -1.921274, 1232.567139) }, -- Boss POS
-	{ name = "Sailor", pos = Vector3.new(249.287292, 7.593238, 926.742493) }, -- Boss POS
+-- Auto Boss TP toggle
+local bossBtn = Instance.new("TextButton")
+bossBtn.Size = UDim2.new(0, 120, 0, 35)
+bossBtn.Position = UDim2.new(0.5, -60, 0, 55)
+bossBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+bossBtn.TextSize = 11
+bossBtn.Font = Enum.Font.GothamBold
+bossBtn.Text = "Boss Farm Mode"
+bossBtn.BorderSizePixel = 0
+bossBtn.ZIndex = 11
+bossBtn.Parent = screenGui
+Instance.new("UICorner", bossBtn).CornerRadius = UDim.new(0, 6)
+
+local function updateBossBtn()
+	bossBtn.BackgroundColor3 = autoBossTP and Color3.fromRGB(0, 180, 0) or Color3.fromRGB(180, 0, 0)
+end
+
+updateBossBtn()
+
+bossBtn.MouseButton1Click:Connect(function()
+	autoBossTP = not autoBossTP
+	updateBossBtn()
+	saveState()
+end)
+
+local allIslands = {
+	{ name = "Lawless", pos = Vector3.new(54.656269, 6.627283, 1814.841064), boss = false },
+	{ name = "Ninja", pos = Vector3.new(-1876.813843, 13.558611, -737.722473), boss = false },
+	{ name = "Ninja", pos = Vector3.new(-2109.786865, 12.801344, -596.099854), boss = true },
+	{ name = "Judgement", pos = Vector3.new(-1273.102905, 8.520060, -1191.468994), boss = false },
+	{ name = "Shinjuku", pos = Vector3.new(-21.131468, 9.205597, -1847.090454), boss = false },
+	{ name = "Shinjuku", pos = Vector3.new(669.320557, 9.404799, -1693.271973), boss = false },
+	{ name = "Slime", pos = Vector3.new(-1124.683838, 13.918226, 373.355255), boss = false },
+	{ name = "Hollow", pos = Vector3.new(-568.870422, -1.921274, 1232.567139), boss = true },
+	{ name = "Sailor", pos = Vector3.new(249.287292, 7.593238, 926.742493), boss = true },
 }
 
 local function isAllowed()
@@ -105,14 +142,10 @@ end)
 
 task.spawn(function()
 	for _, obj in ipairs(workspace:GetDescendants()) do
-		if obj:IsA("Texture") or obj:IsA("Decal") then
-			obj:Destroy()
-		end
+		if obj:IsA("Texture") or obj:IsA("Decal") then obj:Destroy() end
 	end
 	workspace.DescendantAdded:Connect(function(obj)
-		if obj:IsA("Texture") or obj:IsA("Decal") then
-			obj:Destroy()
-		end
+		if obj:IsA("Texture") or obj:IsA("Decal") then obj:Destroy() end
 	end)
 end)
 
@@ -127,7 +160,11 @@ task.spawn(function()
 end)
 
 while true do
-	for _, island in ipairs(islands) do
+	for _, island in ipairs(allIslands) do
+		if island.boss and not autoBossTP then
+			task.wait(0)
+			continue
+		end
 		if isAllowed() then
 			pcall(function() PortalRemote:FireServer(island.name) end)
 			task.wait(0.3)

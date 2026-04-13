@@ -11,7 +11,7 @@ local PortalRemote = ReplicatedStorage.Remotes.TeleportToPortal
 
 Settings.Rendering.QualityLevel = 1
 
--- Load saved boss TP state
+-- Save File
 local autoBossTP = true
 pcall(function()
 	local saved = readfile("autoBossTP.txt")
@@ -35,7 +35,7 @@ blackScreen.ZIndex = 10
 blackScreen.Visible = true
 blackScreen.Parent = screenGui
 
--- Black screen toggle (top center)
+-- Black Sceeen
 local toggleBtn = Instance.new("TextButton")
 toggleBtn.Size = UDim2.new(0, 120, 0, 35)
 toggleBtn.Position = UDim2.new(0.5, -60, 0, 10)
@@ -54,7 +54,7 @@ toggleBtn.MouseButton1Click:Connect(function()
 	toggleBtn.Text = blackScreen.Visible and "Layar Ireng: Idup" or "Layar Ireng: Ded"
 end)
 
--- Auto Boss TP toggle
+-- Boss Toggle
 local bossBtn = Instance.new("TextButton")
 bossBtn.Size = UDim2.new(0, 120, 0, 35)
 bossBtn.Position = UDim2.new(0.5, -60, 0, 55)
@@ -79,6 +79,7 @@ bossBtn.MouseButton1Click:Connect(function()
 	saveState()
 end)
 
+-- Island List
 local allIslands = {
 	{ name = "Lawless", pos = Vector3.new(54.656269, 6.627283, 1814.841064), boss = false },
 	{ name = "Ninja", pos = Vector3.new(-1876.813843, 13.558611, -737.722473), boss = false },
@@ -91,6 +92,7 @@ local allIslands = {
 	{ name = "Sailor", pos = Vector3.new(249.287292, 7.593238, 926.742493), boss = true },
 }
 
+-- Players Count, max 2 players only in server
 local function isAllowed()
 	return #Players:GetPlayers() <= 2
 end
@@ -103,6 +105,7 @@ local function equipItem(char)
 	if item then hum:EquipTool(item) end
 end
 
+-- Anti-Anchor
 local function antiAnchor(char)
 	local hrp = char:WaitForChild("HumanoidRootPart")
 	hrp.Anchored = false
@@ -120,6 +123,7 @@ end)
 equipItem(character)
 antiAnchor(character)
 
+-- Rejoining Stuff
 game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(child)
 	if child.Name == "ErrorPrompt" then
 		while true do
@@ -140,6 +144,7 @@ task.spawn(function()
 	end
 end)
 
+-- Additional, Idk if this works? // Removing Texture & Decal
 task.spawn(function()
 	for _, obj in ipairs(workspace:GetDescendants()) do
 		if obj:IsA("Texture") or obj:IsA("Decal") then obj:Destroy() end
@@ -149,6 +154,7 @@ task.spawn(function()
 	end)
 end)
 
+-- Remote Stuff
 task.spawn(function()
 	while true do
 		if isAllowed() then
@@ -159,19 +165,20 @@ task.spawn(function()
 	end
 end)
 
+-- Boss TP Stuff
 while true do
 	for _, island in ipairs(allIslands) do
 		if island.boss and not autoBossTP then
-			task.wait(0)
+			task.wait(0) -- Additional delay teleport to boss position, default = 0
 			continue
 		end
 		if isAllowed() then
 			pcall(function() PortalRemote:FireServer(island.name) end)
-			task.wait(0.3)
+			task.wait(0.3) -- Quick wait after firing portal remote
 			if character and character.Parent then
 				character:PivotTo(CFrame.new(island.pos))
 			end
 		end
-		task.wait(0.8)
+		task.wait(0.8) -- Delay teleport to NPCs/Bosses Position
 	end
 end

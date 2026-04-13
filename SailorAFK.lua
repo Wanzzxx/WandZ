@@ -188,7 +188,7 @@ while true do
 		end
 		if isAllowed() then
 			pcall(function() PortalRemote:FireServer(island.name) end)
-			task.wait(0.3) -- Quick wait after firing portal remote
+			task.wait(0.5) -- Quick wait after firing portal remote
 			if character and character.Parent then
 				character:PivotTo(CFrame.new(island.pos))
 			end

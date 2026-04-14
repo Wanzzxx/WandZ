@@ -187,14 +187,19 @@ while true do
 			continue
 		end
 		if isAllowed() then
+			-- 1. Wait for nearby NPCs to die first
+			waitForClear()
+
+			-- 2. Fire portal remote
 			pcall(function() PortalRemote:FireServer(island.name) end)
-			task.wait(0.5) -- Quick wait after firing portal remote
+			task.wait(0.5) -- Wait for server to register portal
+
+			-- 3. Teleport to position
 			if character and character.Parent then
 				character:PivotTo(CFrame.new(island.pos))
 			end
-			waitForClear() -- Wait until nearby NPCs are dead
 		end
 	end
 end
 
--- V1
+-- V2

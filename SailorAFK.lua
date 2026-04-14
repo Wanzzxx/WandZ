@@ -176,7 +176,7 @@ end
 -- Wait until all nearby NPCs are dead then move on
 local function waitForClear()
 	while not allNearbyDead() do
-		task.wait(0.3)
+		task.wait(0.5)
 	end
 end
 
@@ -188,7 +188,7 @@ while true do
 		end
 		if isAllowed() then
 			pcall(function() PortalRemote:FireServer(island.name) end)
-			task.wait(0.3) -- Quick wait after firing portal remote
+			task.wait(0.5) -- Quick wait after firing portal remote
 			if character and character.Parent then
 				character:PivotTo(CFrame.new(island.pos))
 			end
@@ -196,3 +196,5 @@ while true do
 		end
 	end
 end
+
+-- V1

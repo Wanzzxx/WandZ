@@ -176,7 +176,7 @@ end
 -- Wait until all nearby NPCs are dead then move on
 local function waitForClear()
 	while not allNearbyDead() do
-		task.wait(0.5)
+		task.wait()
 	end
 end
 
@@ -202,4 +202,4 @@ while true do
 	end
 end
 
--- V2
+-- V3

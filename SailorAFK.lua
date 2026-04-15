@@ -176,7 +176,7 @@ end
 -- Wait until all nearby NPCs are dead then move on
 local function waitForClear()
 	while not allNearbyDead() do
-		task.wait()
+		task.wait(0.5)
 	end
 end
 
@@ -192,7 +192,7 @@ while true do
 
 			-- 2. Fire portal remote
 			pcall(function() PortalRemote:FireServer(island.name) end)
-			task.wait(0.5) -- Wait for server to register portal
+			task.wait(0.1) -- Wait for server to register portal
 
 			-- 3. Teleport to position
 			if character and character.Parent then

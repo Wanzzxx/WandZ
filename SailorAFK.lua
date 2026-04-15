@@ -156,7 +156,7 @@ task.spawn(function()
 end)
 
 -- Check if all nearby NPCs within range are dead
-local RANGE = 20
+local RANGE = 50
 local function allNearbyDead()
 	if not character then return true end
 	local hrp = character:FindFirstChild("HumanoidRootPart")
@@ -176,7 +176,7 @@ end
 -- Wait until all nearby NPCs are dead then move on
 local function waitForClear()
 	while not allNearbyDead() do
-		task.wait(0.5)
+		task.wait(0.3)
 	end
 end
 
@@ -192,7 +192,7 @@ while true do
 
 			-- 2. Fire portal remote
 			pcall(function() PortalRemote:FireServer(island.name) end)
-			task.wait(0.1) -- Wait for server to register portal
+			task.wait(0.5) -- Wait for server to register portal
 
 			-- 3. Teleport to position
 			if character and character.Parent then
@@ -202,4 +202,4 @@ while true do
 	end
 end
 
--- V3
+-- V4

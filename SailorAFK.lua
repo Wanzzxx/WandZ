@@ -8,6 +8,14 @@ local character = player.Character or player.CharacterAdded:Wait()
 
 local AbilityRemote = ReplicatedStorage.AbilitySystem.Remotes.RequestAbility
 local PortalRemote = ReplicatedStorage.Remotes.TeleportToPortal
+local REU = ReplicatedStorage.Remotes.RequestEasterUpgrade
+
+local args = {
+    [1] = "EggDropChance"
+}
+
+game:GetService("ReplicatedStorage").Remotes.RequestEasterUpgrade:InvokeServer(unpack(args))
+
 
 Settings.Rendering.QualityLevel = 1
 
@@ -149,6 +157,8 @@ task.spawn(function()
 		if isAllowed() then
 			AbilityRemote:FireServer(2)
 			ReplicatedStorage.Remotes.AntiAFKHeartbeat:FireServer()
+			REU:FireServer("EggDropChance")
+			REU:FireServer("1+EggChance")
 		end
 		task.wait(0.1)
 	end

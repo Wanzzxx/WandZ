@@ -1,3 +1,5 @@
+if game.PlaceId ~= 130167267952199 then return end
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
@@ -155,3 +157,5 @@ while true do
 		end
 	end
 end
+
+-- V1

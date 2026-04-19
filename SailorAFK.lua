@@ -6,9 +6,9 @@ local Settings = settings()
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 
-local AbilityRemote = ReplicatedStorage.AbilitySystem.Remotes.RequestAbility
-local PortalRemote = ReplicatedStorage.Remotes.TeleportToPortal
-local REU = ReplicatedStorage.Remotes.RequestEasterUpgrade
+local AbilityRemote = ReplicatedStorage.AbilitySystem.Remotes:WaitForChild("RequestAbility")
+local PortalRemote = ReplicatedStorage.Remotes:WaitForChild("TeleportToPortal")
+local REU = ReplicatedStorage.Remotes:WaitForChild("RequestEasterUpgrade")
 
 Settings.Rendering.QualityLevel = 1
 
@@ -148,10 +148,12 @@ end)
 task.spawn(function()
 	while true do
 		if isAllowed() then
-			AbilityRemote:FireServer(2)
-			ReplicatedStorage.Remotes.AntiAFKHeartbeat:FireServer()
-			REU:FireServer("EggDropChance")
-			REU:FireServer("1+EggChance")
+			pcall(function()
+				AbilityRemote:FireServer(2)
+				ReplicatedStorage.Remotes.AntiAFKHeartbeat:FireServer()
+				REU:FireServer("EggDropChance")
+				REU:FireServer("1+EggChance")
+			end)
 		end
 		task.wait(0.1)
 	end
@@ -204,4 +206,4 @@ while true do
 	end
 end
 
--- V6
+-- V7

@@ -10,13 +10,6 @@ local AbilityRemote = ReplicatedStorage.AbilitySystem.Remotes.RequestAbility
 local PortalRemote = ReplicatedStorage.Remotes.TeleportToPortal
 local REU = ReplicatedStorage.Remotes.RequestEasterUpgrade
 
-local args = {
-    [1] = "EggDropChance"
-}
-
-game:GetService("ReplicatedStorage").Remotes.RequestEasterUpgrade:InvokeServer(unpack(args))
-
-
 Settings.Rendering.QualityLevel = 1
 
 -- Save File
@@ -211,4 +204,4 @@ while true do
 	end
 end
 
--- V5
+-- V6

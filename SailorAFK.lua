@@ -81,14 +81,13 @@ end)
 
 -- Island List
 local allIslands = {
+	{ name = "Easter", pos = Vector3.new(2307.104980, 6.089194, 2224.522705), boss = false },
 	{ name = "Lawless", pos = Vector3.new(54.656269, 6.627283, 1814.841064), boss = false },
 	{ name = "Ninja", pos = Vector3.new(-1876.813843, 13.558611, -737.722473), boss = false },
-	{ name = "Ninja", pos = Vector3.new(-2109.786865, 12.801344, -596.099854), boss = true }, -- Boss POS
 	{ name = "Judgement", pos = Vector3.new(-1273.102905, 8.520060, -1191.468994), boss = false },
-	{ name = "Shinjuku", pos = Vector3.new(-21.131468, 9.205597, -1847.090454), boss = false },
-	{ name = "Shinjuku", pos = Vector3.new(669.320557, 9.404799, -1693.271973), boss = false },
-	{ name = "Easter", pos = Vector3.new(2307.104980, 6.089194, 2224.522705), boss = false },
-	{ name = "Slime", pos = Vector3.new(-1124.683838, 13.918226, 373.355255), boss = false },
+	{ name = "Shinjuku", pos = Vector3.new(-21.131468, 9.205597, -1847.090454), boss = true }, -- Opt Pos
+	{ name = "Shinjuku", pos = Vector3.new(669.320557, 9.404799, -1693.271973), boss = true }, -- Opt Pos
+	{ name = "Ninja", pos = Vector3.new(-2109.786865, 12.801344, -596.099854), boss = true }, -- Boss POS
 	{ name = "Hollow", pos = Vector3.new(-568.870422, -1.921274, 1232.567139), boss = true }, -- Boss POS
 	{ name = "Sailor", pos = Vector3.new(249.287292, 7.593238, 926.742493), boss = true }, -- Boss POS
 }
@@ -202,4 +201,4 @@ while true do
 	end
 end
 
--- V4
+-- V5
